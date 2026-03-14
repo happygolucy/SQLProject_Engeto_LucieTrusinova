@@ -1,8 +1,5 @@
 --Tabulka 1:  porovnání dostupnosti potravin na základě průměrných příjmů za určité časové období.
 
-commit;
-
-rollback;
 
 select
 	*
@@ -10,6 +7,9 @@ from
 	t_lucie_trusinova_project_sql_primary_final;
 
 begin;
+rollback;
+commit;
+
 
 create table t_lucie_trusinova_project_sql_primary_final
 (id BIGINT generated always as identity primary key,
@@ -107,16 +107,14 @@ order by
 ---Tabulka 2: tabulka s HDP, GINI koeficientem a populací dalších evropských států ve stejném období, jako primární přehled pro ČR.
 
 
-commit;
-
-rollback;
-
 select
 	*
 from
 	t_lucie_trusinova_project_sql_secondary_final;
 
 begin;
+rollback;
+commit;
 
 create table t_lucie_trusinova_project_sql_secondary_final
 (id BIGINT generated always as identity primary key,
