@@ -1,9 +1,8 @@
-
 --tvorba primární tabulky:
 
 CREATE TABLE t_lucie_trusinova_project_sql_primary_final
 (id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-   YEAR INT NOT NULL,   
+   year INT NOT NULL,   
 	food_type TEXT,
    price_level NUMERIC(12, 2),
    price_value_per_unit TEXT,
@@ -17,7 +16,7 @@ CREATE TABLE t_lucie_trusinova_project_sql_primary_final
 WITH combined AS
 (
 SELECT
-	cpay.payroll_year AS YEAR,
+	cpay.payroll_year AS year,
 	cpc.name AS food_type,
 	NULL::text AS industry_branch,
 	AVG(cp.value) AS price_level,
@@ -41,7 +40,7 @@ GROUP BY
 	cpc.price_unit
 UNION ALL
 SELECT
-	cpay.payroll_year AS YEAR,
+	cpay.payroll_year AS year,
 	NULL::text AS food_type,
 	cpib.name AS industry_branch,
 	NULL::NUMERIC AS price_level,
@@ -61,7 +60,7 @@ GROUP BY
 INSERT
 	INTO
 	t_lucie_trusinova_project_sql_primary_final
-	(YEAR,
+	(year,
 	food_type,
 	price_level,
 	price_value_per_unit,
@@ -69,7 +68,7 @@ INSERT
 	wages,
 	source_type)
 SELECT
-   YEAR,
+   year,
 	food_type,
 	price_level,
 	price_value_per_unit,
@@ -79,11 +78,11 @@ SELECT
 FROM
 	combined
 WHERE
-	YEAR IN (
+	year IN (
 	SELECT
-		YEAR
+		year
 	FROM
 		combined
-	GROUP BY YEAR
+	GROUP BY year
 	HAVING COUNT(DISTINCT source_type) = 2)
-ORDER BY source_type, YEAR, food_type, industry_branch;
+ORDER BY source_type, year, food_type, industry_branch;
