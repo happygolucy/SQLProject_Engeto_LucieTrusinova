@@ -2,7 +2,7 @@
 
 CREATE VIEW data_q1 AS
 SELECT
-	YEAR,
+	year,
 	industry_branch,
 	wages
 FROM
@@ -11,19 +11,19 @@ WHERE
 	wages IS NOT NULL
 ORDER BY
 	industry_branch,
-	YEAR ;
+	year ;
 
 
 --Select pro meziroční procentuální růst/pokles mezd:
 
 SELECT
-    YEAR,
+    year,
     industry_branch,
     ROUND((wages - LAG(wages) OVER (PARTITION BY industry_branch ORDER BY year)) * 100.0 / LAG(wages) OVER (PARTITION BY industry_branch ORDER BY year),2) AS yoy_growth_percent
 FROM data_q1
 ORDER BY
     industry_branch,
-    YEAR;
+    year;
  
 
 --Select pro celkový růst napříč jednotlivými odvětvími: 
