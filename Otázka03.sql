@@ -14,16 +14,27 @@ ORDER BY yoy_percent_change ASC;
 
 --select pro nejnižší procentuální cenový růst (zlevnění)
 
+WITH food_prices AS (
+    SELECT
+        food_type,
+        year,
+        price_level,
+        LAG(price_level) OVER (PARTITION BY food_type ORDER BY year) AS previous_price
+    FROM t_lucie_trusinova_project_sql_primary_final
+    WHERE price_level IS NOT NULL
+),
+food_price_growth AS (
+    SELECT
+        food_type,
+        year,
+        ROUND(((price_level - previous_price)* 100.0 / previous_price), 2) AS yoy_percent_change
+    FROM food_prices
+    WHERE previous_price IS NOT NULL
+)
 SELECT
-	a.food_type,
-	ROUND(AVG((a.price_level - b.price_level) * 100.0 / b.price_level), 2) AS avg_yoy_growth
-FROM
-	t_lucie_trusinova_project_sql_primary_final a
-JOIN t_lucie_trusinova_project_sql_primary_final b
-    ON a.food_type = b.food_type
-	AND a.year = b.year + 1
-GROUP BY
-	a.food_type
-ORDER BY
-	avg_yoy_growth
+    food_type,
+    ROUND(AVG(yoy_percent_change), 2) AS avg_yoy_growth
+FROM food_price_growth
+GROUP BY food_type
+ORDER BY avg_yoy_growth
 LIMIT 3;
