@@ -1,4 +1,3 @@
-
 --select pro 2. otazku:
 
 WITH avg_wages AS (
